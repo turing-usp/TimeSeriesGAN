@@ -89,12 +89,14 @@ class LinearGAN():
 
         return dataloader
 
-    def _init_generator_(self, model_path):
+    def _init_generator_(self, model_path):    
 
         generator = Generator().to(self.cuda)
         optimizer_generator = torch.optim.Adam(generator.parameters())
 
         if os.path.exists(model_path):
+
+            print('initializing generator')
 
             checkpoint_generator = torch.load(model_path)
             generator.load_state_dict(checkpoint_generator['model_state_dict'])
@@ -103,12 +105,14 @@ class LinearGAN():
 
         return (generator, optimizer_generator)
 
-    def _init_discriminator_(self, model_path):
+    def _init_discriminator_(self, model_path):       
 
         discriminator = Discriminator().to(self.cuda)
         optimizer_discriminator = torch.optim.Adam(discriminator.parameters())
 
         if os.path.exists(model_path):
+
+            print('initializing discriminator')
 
             checkpoint_discriminator = torch.load(model_path)
             discriminator.load_state_dict(
@@ -171,7 +175,7 @@ class LinearGAN():
             plt.show()
 
     def _save_model_(self, epoch, batch, generator_loss, discriminator_loss):
-        will_save_model = epoch % 500 == 0 and batch == 0
+        will_save_model = epoch % 500 == 0 and epoch != 0 and batch == 0
         if will_save_model:
             print('Saving model')
 
